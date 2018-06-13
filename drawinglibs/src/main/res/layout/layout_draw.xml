@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:background="@android:color/transparent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/activity_draw"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_below="@+id/toolbar"
+            android:background="#cdcdcd" />
+        <com.wangbo.www.drawinglibs.view.FreeScrollView
+            android:layout_below="@+id/line"
+            android:background="@android:color/transparent"
+            android:id="@+id/freeScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.wangbo.www.drawinglibs.view.PaperContainer
+            android:background="@android:color/transparent"
+            android:id="@+id/paperContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+        <com.wangbo.www.drawinglibs.view.DrawView
+            android:background="@android:color/transparent"
+            android:id="@+id/draw_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+             />
+        </com.wangbo.www.drawinglibs.view.PaperContainer>
+        </com.wangbo.www.drawinglibs.view.FreeScrollView>
+        <com.wangbo.www.drawinglibs.view.VerticalSeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:progress="10"
+            android:scrollbarSize="300dp" />
+        <include
+            android:id="@+id/bottombar"
+            layout="@layout/navigation_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp" />
+    </RelativeLayout>
+</LinearLayout>

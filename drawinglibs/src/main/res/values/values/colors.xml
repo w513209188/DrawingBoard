@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPencil">#ED7D6E</color>
+    <color name="colorPen">#72BDC7</color>
+    <color name="colorWater">#8089C2</color>
+    <color name="colorChalk">#68D1C2</color>
+    <color name="colorMarker">#F38F65</color>
+    <color name="colorSoft">#7CCEF2</color>
+    <color name="colorIcFill">#EAEAED</color>
+
+    <color name="colorMode">#7891F5</color>
+
+</resources>

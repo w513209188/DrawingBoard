@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name = "CustomDrawView">
+        <attr name = "openBottomBar" format = "boolean" />
+        <attr name="widthLine" format="integer"/>
+        <attr name="heightLine" format="integer"/>
+
+    </declare-styleable>
+</resources>

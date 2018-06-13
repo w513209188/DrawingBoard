@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Note</string>
+    <string name="mode_path">默认</string>
+    <string name="mode_line">直线</string>
+    <string name="mode_rectangle">矩形</string>
+    <string name="mode_circle">圆形</string>
+    <string name="open">打开</string>
+    <string name="close">关闭</string>
+</resources>
