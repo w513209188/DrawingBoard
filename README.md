@@ -19,4 +19,5 @@ allprojects {
 ```
 compile 'com.github.w513209188:DrawingBoard:v1.0.0'
 
-使用介绍 戳这里 ☞ 传送门
+使用介绍 戳这里 ☞ [传送门](https://www.jianshu.com/p/b2076e013546)
+
