@@ -1,4 +1,4 @@
-项目介绍
+#项目介绍
 
 DrawingBoard是一个画笔涂鸦功能，几行代码实现，支持自定义
 
@@ -9,8 +9,14 @@ DrawingBoard是一个画笔涂鸦功能，几行代码实现，支持自定义
 使用说明
 
 在项目module下的gradle中添加以下依赖：
-仓库：maven { url "https://jitpack.io" }
-
-compile 'com.github.w513209188:payUtils:v1.0.4'
+仓库：
+```
+allprojects {
+		repositories {
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+compile 'com.github.w513209188:DrawingBoard:v1.0.0'
 
 使用介绍 戳这里 ☞ 传送门
