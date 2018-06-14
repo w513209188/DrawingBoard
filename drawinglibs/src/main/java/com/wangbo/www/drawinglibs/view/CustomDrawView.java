@@ -447,6 +447,7 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
      * 保存当前画布
      */
     public void saveDraw(){
+
         if (mPageSize > 1) {
             copy();
         } else {
@@ -484,7 +485,6 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
 
                     @Override
                     public void onDeny(String permission, int position) {
-
                     }
 
                     @Override
