@@ -7,7 +7,11 @@
     android:background="@android:color/transparent"
     tools:context=".MainActivity">
 <com.wangbo.www.drawinglibs.view.CustomDrawView
-    dv:openBottomBar="false"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    dv:openBottomBar="true"
+    dv:heightLine="2"
+    dv:widthLine="2"
+    dv:openTopBar="true"
+    />
 </LinearLayout>

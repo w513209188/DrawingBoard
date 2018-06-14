@@ -46,7 +46,7 @@
         </com.wangbo.www.drawinglibs.view.FreeScrollView>
         <com.wangbo.www.drawinglibs.view.VerticalSeekBar
             android:id="@+id/seekBar"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="200dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"

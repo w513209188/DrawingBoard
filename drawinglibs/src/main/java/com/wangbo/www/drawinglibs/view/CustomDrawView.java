@@ -1,5 +1,6 @@
 package com.wangbo.www.drawinglibs.view;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,8 +44,13 @@ import com.wangbo.www.drawinglibs.utils.FileUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import me.weyye.hipermission.HiPermission;
+import me.weyye.hipermission.PermissionCallback;
+import me.weyye.hipermission.PermissionItem;
 
 public class CustomDrawView extends LinearLayout implements View.OnClickListener, ColorPicker.OnColorChangedListener, ModeSelectCallBack, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener{
     //初始化对话框
@@ -65,8 +71,8 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
     private PaperContainer mPaperContainer;
     private  BaseState baseState;
     private Context mContext;
-    private boolean openBottomBar;
-    private View bottombar;
+    private boolean openBottomBar,openTopBar;
+    private View bottombar,topBar;
     public CustomDrawView(Context context) {
         this(context,null);
     }
@@ -78,19 +84,25 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
     public CustomDrawView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.mContext=context;
-        TypedArray typedArray=context.obtainStyledAttributes(R.styleable.CustomDrawView);
+        TypedArray typedArray=context.obtainStyledAttributes(attrs,R.styleable.CustomDrawView);
         openBottomBar=typedArray.getBoolean(R.styleable.CustomDrawView_openBottomBar,false);
         wTime=typedArray.getInt(R.styleable.CustomDrawView_widthLine,1);
         hTime=typedArray.getInt(R.styleable.CustomDrawView_heightLine,1);
+        openTopBar=typedArray.getBoolean(R.styleable.CustomDrawView_openTopBar,false);
+        Log.e("uuuuuu",openTopBar+"---"+openBottomBar);
         initView();
     }
     private void initView(){
+        list = new ArrayList<>();
         mView= LayoutInflater.from(getContext()).inflate(R.layout.layout_draw,this);
         mDrawView = mView.findViewById(R.id.draw_view);
         mDrawView.initParameter(wTime,hTime);
         bottombar=findViewById(R.id.bottombar);
         bottombar.setVisibility(openBottomBar?VISIBLE:GONE);
         mVerticalSeekBar=findViewById(R.id.seekBar);
+        mVerticalSeekBar.setVisibility(openBottomBar?VISIBLE:GONE);
+        topBar=findViewById(R.id.toolbar);
+        topBar.setVisibility(openTopBar?VISIBLE:GONE);
         //初始化颜色板
         initColorPickerDialog();
         //初始化自定义的ToolBar
@@ -102,6 +114,34 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
         //初始化模式选择的PopupWindow
         initModeSelectWindow();
         initDialog();
+        initDrawData();
+    }
+    private void initDrawData() {
+        mPicturePath =NoteApplication.ROOT_DIRECTORY+"/20180614114826.png"; //NoteApplication.noteMap.get("1");
+        String filePath ="null";//NoteApplication.ROOT_DIRECTORY+"/20180614114826.png";// NoteApplication.noteMap.get("1");
+        Log.e("----->>.",mPicturePath+"---"+filePath);
+        if (mPicturePath != null) {
+            Log.e("lichaojian--path",mPicturePath);
+            String xmlPath = mPicturePath.substring(0, mPicturePath.length() - 3) + "xml";
+            DrawDataUtils.getInstance().structureReReadXMLData("file://" + xmlPath);
+            mDrawView.drawFromData();
+            mDrawView.addCommand();
+            if (!filePath.equals("null") && filePath != null) {
+                File file = new File(filePath);
+                File[] allFiles = file.listFiles();
+                for (int i = 0; i < allFiles.length; ++i) {
+                    if (allFiles[i].getPath().contains("png")) {
+                        list.add(allFiles[i].getPath());
+                    }
+                }
+            }
+        }
+
+        mPageSize = list.size();
+        if (mPageSize == 0) {
+            mPageSize = 1;
+        }
+        mTVPageSize.setText(Integer.toString(mPageSize));
     }
     private void initDialog() {
         mBuilder = new AlertDialog.Builder(getContext());
@@ -180,15 +220,19 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
      */
     private void save() {
         String fileName = mDrawView.save(mPicturePath, NoteApplication.ROOT_DIRECTORY);
-        if (DrawDataUtils.getInstance().getSaveDrawDataList().size() > 0 && fileName != null) {
-            Intent intent = new Intent();
-            intent.putExtra("path", NoteApplication.ROOT_DIRECTORY + "/" + fileName + ".png");
-            intent.putExtra("filePath", "null");
-            if (mPicturePath == null) {
-            } else {
-            }
-        } else {
-        }
+        //20180614114826
+        Log.e("fileName",fileName);
+        NoteApplication.noteMap.put("1",fileName);
+//
+//        if (DrawDataUtils.getInstance().getSaveDrawDataList().size() > 0 && fileName != null) {
+//            Intent intent = new Intent();
+//            intent.putExtra("path", NoteApplication.ROOT_DIRECTORY + "/" + fileName + ".png");
+//            intent.putExtra("filePath", "null");
+//            if (mPicturePath == null) {
+//            } else {
+//            }
+//        } else {
+//        }
         mPicturePath = null;
     }
 
@@ -220,11 +264,7 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
             dataReset();
 
         } else if (i == R.id.ll_save) {
-            if (mPageSize > 1) {
-                copy();
-            } else {
-                save();
-            }
+           getperr();
 
         } else if (i == R.id.rl_pencil_menu_select) {
             if(baseState==null)
@@ -361,5 +401,80 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
      */
     public void setEraser(){
         mDrawView.setCurrentState(EraserState.getInstance());
+    }
+    /**
+     * 展示推出前的确认信息
+     */
+    public void showMsg(){
+        mBuilder.show();
+    }
+
+    /**
+     * 撤销前一步
+     */
+    public void DrawBack(){
+        mDrawView.setCanvasCode(NoteApplication.CANVAS_UNDO);
+        mDrawView.invalidate();
+    }
+
+    /**
+     * 前进
+     */
+    public void DrawGo(){
+        mDrawView.setCanvasCode(NoteApplication.CANVAS_REDO);
+        mDrawView.invalidate();
+    }
+
+    /**
+     * 清除所有画笔信息
+     */
+    public void cleanAll(){
+        mDrawView.setCanvasCode(NoteApplication.CANVAS_RESET);
+        mDrawView.invalidate();
+        dataReset();
+    }
+
+    /**
+     * 保存当前画布
+     */
+    public void saveDraw(){
+        if (mPageSize > 1) {
+            copy();
+        } else {
+            save();
+        }
+    }
+    private void getperr(){
+        List<PermissionItem> permissionItems = new ArrayList<PermissionItem>();
+        permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE));
+        permissionItems.add(new PermissionItem(Manifest.permission.READ_EXTERNAL_STORAGE));
+        HiPermission.create(mContext)
+                .permissions(permissionItems)
+                .checkMutiPermission(new PermissionCallback() {
+                    @Override
+                    public void onClose() {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                    //获取到的权限
+                        if (mPageSize > 1) {
+                            copy();
+                        } else {
+                            save();
+                        }
+                    }
+
+                    @Override
+                    public void onDeny(String permission, int position) {
+
+                    }
+
+                    @Override
+                    public void onGuarantee(String permission, int position) {
+
+                    }
+                });
     }
 }

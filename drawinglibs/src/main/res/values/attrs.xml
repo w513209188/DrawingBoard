@@ -4,6 +4,6 @@
         <attr name = "openBottomBar" format = "boolean" />
         <attr name="widthLine" format="integer"/>
         <attr name="heightLine" format="integer"/>
-
+        <attr name="openTopBar" format="boolean"/>
     </declare-styleable>
 </resources>

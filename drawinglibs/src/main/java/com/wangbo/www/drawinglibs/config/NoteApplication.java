@@ -11,6 +11,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class NoteApplication extends Application {
 
     public static final int MODE_PATH = 0;
@@ -29,11 +32,11 @@ public class NoteApplication extends Application {
     public static final int COMMAND_TRANSLATE = 4;
     public static final int COMMAND_SCALE = 5;
 
-    public static final String ROOT_DIRECTORY = Environment.getExternalStorageDirectory().toString() + "/note";
+    public static final String ROOT_DIRECTORY = Environment.getExternalStorageDirectory().toString() + "/draw_note";
     public static final String TEMPORARY_PATH = ROOT_DIRECTORY + "/temporary";
     public static final int OK = 1;
     public static final int CANCEL = -1;
-
+    public static Map<String,String> noteMap=new HashMap<>();
     public static ImageLoader getInstance(Context context) {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration
                 .Builder(context)
