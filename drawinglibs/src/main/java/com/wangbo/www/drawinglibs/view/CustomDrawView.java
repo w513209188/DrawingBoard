@@ -73,6 +73,12 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
     private Context mContext;
     private boolean openBottomBar,openTopBar;
     private View bottombar,topBar;
+    private String flags="1";
+
+    public void setFlags(String flags) {
+        this.flags = flags;
+    }
+
     public CustomDrawView(Context context) {
         this(context,null);
     }
@@ -89,7 +95,6 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
         wTime=typedArray.getInt(R.styleable.CustomDrawView_widthLine,1);
         hTime=typedArray.getInt(R.styleable.CustomDrawView_heightLine,1);
         openTopBar=typedArray.getBoolean(R.styleable.CustomDrawView_openTopBar,false);
-        Log.e("uuuuuu",openTopBar+"---"+openBottomBar);
         initView();
     }
     private void initView(){
@@ -117,9 +122,10 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
         initDrawData();
     }
     private void initDrawData() {
-        mPicturePath =NoteApplication.ROOT_DIRECTORY+"/20180614114826.png"; //NoteApplication.noteMap.get("1");
+        if(NoteApplication.noteMap.get(flags)==null)
+            return;
+        mPicturePath =NoteApplication.noteMap.get(flags)+".png";
         String filePath ="null";//NoteApplication.ROOT_DIRECTORY+"/20180614114826.png";// NoteApplication.noteMap.get("1");
-        Log.e("----->>.",mPicturePath+"---"+filePath);
         if (mPicturePath != null) {
             Log.e("lichaojian--path",mPicturePath);
             String xmlPath = mPicturePath.substring(0, mPicturePath.length() - 3) + "xml";
@@ -219,10 +225,13 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
      * 保存当前图片
      */
     private void save() {
-        String fileName = mDrawView.save(mPicturePath, NoteApplication.ROOT_DIRECTORY);
-        //20180614114826
-        Log.e("fileName",fileName);
-        NoteApplication.noteMap.put("1",fileName);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String fileName = mDrawView.save(mPicturePath, NoteApplication.ROOT_DIRECTORY);
+                NoteApplication.noteMap.put(flags,fileName);
+            }
+        }).start();
 //
 //        if (DrawDataUtils.getInstance().getSaveDrawDataList().size() > 0 && fileName != null) {
 //            Intent intent = new Intent();
@@ -443,6 +452,13 @@ public class CustomDrawView extends LinearLayout implements View.OnClickListener
         } else {
             save();
         }
+    }
+
+    /**
+     * 清除所有画布
+     */
+    public void clearDraw(){
+        NoteApplication.noteMap.clear();
     }
     private void getperr(){
         List<PermissionItem> permissionItems = new ArrayList<PermissionItem>();
